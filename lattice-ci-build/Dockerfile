@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
 cmake make wget unzip tar build-essential python3 python3-pip git \
 flex bison autoconf
 
-# Checkout CIRCT and LLVM
 RUN git clone https://github.com/verilator/verilator /tmp/verilator && \
 cd /tmp/verilator && \
 git checkout $VERILATOR_VERSION && \
@@ -19,3 +18,23 @@ git submodule update --init --depth 1
 
 RUN cd /tmp/verilator && autoconf && ./configure && make -j2 && make install
 
+
+
+#################### 
+# Riscv Compiler
+
+
+RUN apt-get install -y \
+autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev libusb-1.0-0-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev device-tree-compiler pkg-config git libexpat1-dev libncurses-dev
+
+RUN git clone https://github.com/riscv/riscv-tools.git /tmp/riscv-tools && \
+cd /tmp/riscv-tools && \
+git checkout ef03b6a70d9baa03943661bce37b9f70ad36f706 && \
+git submodule update --init --recursive && \
+export RISCV=/opt/riscv && \
+mkdir -p $RISCV && \
+./build-rv32ima.sh
+
+
+RUN ls /opt
+RUN ls /opt/riscv
