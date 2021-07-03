@@ -38,3 +38,15 @@ mkdir -p $RISCV && \
 
 RUN ls /opt
 RUN ls /opt/riscv
+
+
+
+#################### 
+# Lattice Diamond
+
+
+RUN apt install -y ksh libsm6 libxrender1 libfontconfig1 libxt6 unzip xauth alien
+
+RUN cd /tmp && \
+wget http://files.latticesemi.com/Diamond/3.10/diamond_3_10-base_x64-111-2-x86_64-linux.rpm && \
+alien -ic diamond_3_10-base_x64-111-2-x86_64-linux.rpm && rm -rf diamond_3_10-base_x64-111-2-x86_64-linux.rpm
