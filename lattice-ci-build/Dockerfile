@@ -1,52 +1,13 @@
 # ARG VERILATOR_VERSION=2825940
-ARG VERILATOR_VERSION=verilator_4_016
+# ARG VERILATOR_VERSION=verilator_4_016
 FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update && apt-get install apt-utils -y
-RUN apt-get upgrade -y
 RUN apt-get update && apt-get install -y \
-cmake make wget unzip tar build-essential python3 python3-pip git \
-flex bison autoconf
-
-RUN git clone https://github.com/verilator/verilator /tmp/verilator && \
-cd /tmp/verilator && \
-git checkout $VERILATOR_VERSION && \
-git submodule update --init --depth 1
-
-RUN cd /tmp/verilator && autoconf && ./configure && make -j2 && make install
+cmake make iproute2
 
 
-
-#################### 
-# Riscv Compiler
-
-
-RUN apt-get install -y \
-autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev libusb-1.0-0-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev device-tree-compiler pkg-config git libexpat1-dev libncurses-dev
-
-RUN git clone https://github.com/riscv/riscv-tools.git /tmp/riscv-tools && \
-cd /tmp/riscv-tools && \
-git checkout ef03b6a70d9baa03943661bce37b9f70ad36f706 && \
-git submodule update --init --recursive && \
-export RISCV=/opt/riscv && \
-mkdir -p $RISCV && \
-./build-rv32ima.sh
-
-
-RUN ls /opt
-RUN ls /opt/riscv
-
-
-
-#################### 
-# Lattice Diamond
-
-
-RUN apt install -y ksh libsm6 libxrender1 libfontconfig1 libxt6 unzip xauth alien
-
-RUN cd /tmp && \
-wget http://files.latticesemi.com/Diamond/3.10/diamond_3_10-base_x64-111-2-x86_64-linux.rpm && \
-alien -ic diamond_3_10-base_x64-111-2-x86_64-linux.rpm && rm -rf diamond_3_10-base_x64-111-2-x86_64-linux.rpm
+RUN ip a
